@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const useFetch = (apiPath) => {
+const useFetch = (apiPath, query) => {
   const [data, setData] = useState([]);
   const options = {
     method: "GET",
@@ -13,7 +13,7 @@ const useFetch = (apiPath) => {
   useEffect(() => {
     async function fetchMovies() {
       const response = await fetch(
-        `https://api.themoviedb.org/3/${apiPath}?language=en-US&page=1`,
+        `https://api.themoviedb.org/3/${apiPath}?query=${query}`,
         options
       );
       const data = await response.json();
@@ -21,7 +21,7 @@ const useFetch = (apiPath) => {
     }
 
     fetchMovies();
-  }, [apiPath]);
+  }, [apiPath, query]);
   return {
     data,
   };
