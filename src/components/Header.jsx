@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoMoon, IoSunny } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Header = () => {
   const activeClass =
@@ -8,12 +8,27 @@ const Header = () => {
   const inActiveClass =
     "block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700";
 
-  const [dark, setDark] = useState(false);
+  // dark mode on refresh
+  const [dark, setDark] = useState(() => {
+    const savedDarkMode = localStorage.getItem("darkMode");
+    return savedDarkMode === "true" ? true : false;
+  });
 
   const darkModeHandler = () => {
-    setDark(!dark);
-    document.body.classList.toggle("dark");
+    setDark((prevDark) => {
+      const newDarkMode = !prevDark;
+      localStorage.setItem("darkMode", newDarkMode); // Save to localStorage
+      document.body.classList.toggle("dark", newDarkMode); // Apply dark class to body
+      return newDarkMode;
+    });
   };
+  useEffect(() => {
+    if (dark) {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+  }, [dark]);
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -22,6 +37,7 @@ const Header = () => {
     e.target.reset();
     return navigate(`/search?q=${query}`);
   };
+
   return (
     <header>
       <nav className="bg-white border-gray-200 dark:bg-gray-900">

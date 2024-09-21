@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { IoHomeOutline } from "react-icons/io5";
+import useDocTitle from "../hooks/useDocTitle";
 const PageNotFound = () => {
+  useDocTitle("Page Not Found / Cinibite");
   return (
     <>
       <main className="min-h-screen p-4 flex flex-col items-center">

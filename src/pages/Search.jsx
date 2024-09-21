@@ -1,16 +1,17 @@
 import { useSearchParams } from "react-router-dom";
 import Card from "../components/Card";
 import useFetch from "../hooks/useFetch";
+import useDocTitle from "../hooks/useDocTitle";
 
 const Search = ({ apiPath }) => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q");
   const { data: movies } = useFetch(apiPath, query);
-
+  useDocTitle(`${query} / Cinibite`);
   return (
     <main>
       <section>
-        <p className="text-lg italic font-bold">
+        <p className="text-lg dark:text-gray-300 italic font-bold">
           {movies.length === 0
             ? `No Results Found For (${query})`
             : `${movies.length} results for (${query})`}

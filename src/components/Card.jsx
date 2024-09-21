@@ -1,18 +1,31 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import CardLoader from "./shared/CardLoader";
 
 const Card = ({ movie }) => {
-  const { id, original_title, overview, poster_path } = movie;
-
+  const { id, original_title, overview, poster_path } = movie || {}; // Handle undefined movie
+  const [loading, setLoading] = useState(true); // State to manage loading
   const backUp = "fallbackimg.jpg";
-
   const image = poster_path
     ? `https://image.tmdb.org/t/p/w500${poster_path}`
     : backUp;
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false); // Simulate data fetching delay
+    }, 1000); // Adjust time as per requirement
+
+    return () => clearTimeout(timer); // Clean up timer
+  }, []);
+
+  if (loading) {
+    return <CardLoader />; // Return CardLoader component when loading
+  }
+
   return (
     <div className="max-w-sm mx-auto bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 transform transition-transform duration-300 hover:scale-105">
       <Link to={`/movie/${id}`}>
-        <img className="rounded-t-lg" src={image} alt="" />
+        <img className="rounded-t-lg" src={image} alt={original_title} />
       </Link>
 
       <div className="p-5">
